@@ -1,4 +1,5 @@
 import test, { APIRequestContext, APIResponse, expect } from "@playwright/test";
+import { faker } from '@faker-js/faker';
 
 test.describe("API Testing", () => {
   let fakerApi: APIRequestContext;
@@ -30,9 +31,9 @@ test.describe("API Testing", () => {
   test("AddNewUser", async ({ browser }) => {
     const postResponse = await fakerApi.post("users", {
       data: {
-        name: "Tenali Ramakrishna",
+        name: faker.internet.userName(),
         gender: "male",
-        email: "tenssd3ssddssdahdlddieee.ramakddrssishna@15ce.com",
+        email: faker.internet.email(),
         status: "active",
       }
     });
