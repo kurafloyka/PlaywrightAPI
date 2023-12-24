@@ -18,10 +18,10 @@ test.describe("API Testing", () => {
   });
 
   test("GetAllUsers", async ({ browser }) => {
-    const response = await fakerApi.get("users");
-    expect(response.status()).toEqual(200);
+    const responseGetAllUser = await fakerApi.get("users");
+    expect(responseGetAllUser.status()).toEqual(200);
     //console.log(await response.json());
-    const responseBody = await response.json();
+    const responseBody = await responseGetAllUser.json();
     randomUser = responseBody[0];
     console.log(
       "Name : " + randomUser["name"] + "Email : " + randomUser["email"]
@@ -44,16 +44,23 @@ test.describe("API Testing", () => {
     const postResponseBody = await postResponse.json();
 
     //console.log(postResponse.status());
-    console.log(postResponseBody);
+    //console.log(postResponseBody);
+    //console.log(postResponseBody["name"]);
+
+    expect(postResponseBody["name"]).toEqual(userName);
+
+    const responseAddedUser = await fakerApi.get(
+      "users" + "/" + postResponseBody["id"]
+    );
+    expect(responseAddedUser.status()).toEqual(200);
+    console.log(await responseAddedUser.json());
+    const responseAddedUserBody=await responseAddedUser.json();
+    expect(responseAddedUserBody['name']).toEqual(userName);
   });
 
   test("UpdateUser", async ({ browser }) => {});
 
   test("DeleteUser", async ({ browser }) => {});
-
-  //(Request body ile gönderdiğiniz name ile response’da gelen name degerinin aynı
-  //olduğu kontrol edilir.)
-  //Get one user servisine id ile istek atılıp kullanıcı bilgileri doğrulanır.
 
   //Update customer servisi ile kullanıcı bilgileri değiştirilir servise istek atılır,
   //(Güncellenen kullanıcın bilgileri doğrulanır.)
