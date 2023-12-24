@@ -1,5 +1,5 @@
 import test, { APIRequestContext, APIResponse, expect } from "@playwright/test";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 test.describe("API Testing", () => {
   let fakerApi: APIRequestContext;
@@ -29,17 +29,20 @@ test.describe("API Testing", () => {
   });
 
   test("AddNewUser", async ({ browser }) => {
+    const userName = faker.internet.userName();
+    const email = faker.internet.email();
+
     const postResponse = await fakerApi.post("users", {
       data: {
-        name: faker.internet.userName(),
+        name: userName,
         gender: "male",
-        email: faker.internet.email(),
+        email: email,
         status: "active",
-      }
+      },
     });
     expect(postResponse.status()).toEqual(201);
     const postResponseBody = await postResponse.json();
-    
+
     //console.log(postResponse.status());
     console.log(postResponseBody);
   });
@@ -48,7 +51,6 @@ test.describe("API Testing", () => {
 
   test("DeleteUser", async ({ browser }) => {});
 
-  
   //(Request body ile gönderdiğiniz name ile response’da gelen name degerinin aynı
   //olduğu kontrol edilir.)
   //Get one user servisine id ile istek atılıp kullanıcı bilgileri doğrulanır.
