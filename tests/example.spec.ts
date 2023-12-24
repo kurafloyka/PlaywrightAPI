@@ -12,12 +12,18 @@ test.describe("API Testing", () => {
       'Content-Type':'application/json',
       'Authorization': 'Bearer 784eade1eb774cbd2fe70cf4f2c61d790d6c46f5e2f83158243f931a13c11f59',
     }
+    }); 
+  });
 
-    });
-
+  test("GetAllUsers", async ({ browser }) => {
     const response = await fakerApi.get("users");
+    expect(response.status()).toEqual(200);
     console.log(await response.json());
   });
 
-  test("GetListUsers", async ({ browser }) => {});
+
+  test('', async ({ page }) => {
+    
+  })
+  
 });
