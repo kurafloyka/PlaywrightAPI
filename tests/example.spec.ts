@@ -1,61 +1,29 @@
 import test, { APIRequestContext, APIResponse, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import apiController from "../controller/api.controller";
 
 test.describe("API Testing", () => {
-  let fakerApi: APIRequestContext;
+  //let fakerApi: APIRequestContext;
   let randomUser: APIResponse;
 
   test.beforeAll(async ({ playwright }) => {
-    fakerApi = await playwright.request.newContext({
-      baseURL: "https://gorest.co.in/public/v2/",
-      extraHTTPHeaders: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer 784eade1eb774cbd2fe70cf4f2c61d790d6c46f5e2f83158243f931a13c11f59",
-      },
-    });
+    await apiController.init();
   });
 
   test("GetAllUsers", async ({ browser }) => {
-    const responseGetAllUser = await fakerApi.get("users");
-    expect(responseGetAllUser.status()).toEqual(200);
-    //console.log(await response.json());
-    const responseBody = await responseGetAllUser.json();
-    randomUser = responseBody[0];
-    console.log(
-      "Name : " + randomUser["name"] + "Email : " + randomUser["email"]
-    );
+    await apiController.getUsers();
   });
 
   test("AddNewUser", async ({ browser }) => {
     const userName = faker.internet.userName();
     const email = faker.internet.email();
 
-    const postResponse = await fakerApi.post("users", {
-      data: {
-        name: userName,
-        gender: "male",
-        email: email,
-        status: "active",
-      },
-    });
+    const postResponse = await apiController.getAddedNewUser(userName, email);
     expect(postResponse.status()).toEqual(201);
     const postResponseBody = await postResponse.json();
-
-    //console.log(postResponse.status());
-    //console.log(postResponseBody);
-    //console.log(postResponseBody["name"]);
-
     expect(postResponseBody["name"]).toEqual(userName);
 
-    const responseAddedUser = await fakerApi.get(
-      "users" + "/" + postResponseBody["id"]
-    );
-    expect(responseAddedUser.status()).toEqual(200);
-    console.log(await responseAddedUser.json());
-    const responseAddedUserBody=await responseAddedUser.json();
-    expect(responseAddedUserBody['name']).toEqual(userName);
+    console.log(await apiController.checkAddedNewUser(postResponse, userName));
   });
 
   test("UpdateUser", async ({ browser }) => {});
