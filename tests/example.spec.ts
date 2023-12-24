@@ -3,8 +3,6 @@ import { faker } from "@faker-js/faker";
 import apiController from "../controller/api.controller";
 
 test.describe("API Testing", () => {
-  //let fakerApi: APIRequestContext;
-  let randomUser: APIResponse;
 
   test.beforeAll(async ({ playwright }) => {
     await apiController.init();
